@@ -2,16 +2,17 @@
 " PlugInstall 安装插件
 " PlugUpgrade 更新 vim-plug 自身
 call plug#begin('~/.vim/bundle')
-Plug 'Valloric/YouCompleteMe'
-Plug 'bling/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'SirVer/ultisnips'
-Plug 'tpope/vim-surround'
-Plug 'flazz/vim-colorschemes'
 Plug 'scrooloose/nerdtree'
 Plug 'scrooloose/nerdcommenter'
+Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+" Plug 'SirVer/ultisnips'
+Plug 'tpope/vim-surround'
+Plug 'flazz/vim-colorschemes'
 Plug 'Yggdroot/LeaderF'
 Plug 'ryanoasis/vim-devicons'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install() }}
+Plug 'honza/vim-snippets'
 Plug 'fatih/vim-go'
 call plug#end()
 
@@ -174,29 +175,29 @@ endfunc
 
 
 """""""""""""""""""""""""" YouCompleteMe
-set completeopt=longest,menu
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
-
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf = 0
-"let g:ycm_key_invoke_completion='<C-j>'
-let g:ycm_error_symbol = 'E>'
-let g:ycm_warning_symbol = 'W>'
-" 使用 NerdFont 中的图标表示错误和警告
-" let g:ycm_error_symbol = '﯇'
-" let g:ycm_warning_symbol = '卵'
-let g:ycm_enable_diagnostic_signs = 1
-let g:ycm_enable_diagnostic_highlighting = 1
-let g:ycm_collect_identifiers_from_comments_and_strings = 0
-let g:ycm_complete_in_comments = 1
-let g:ycm_complete_in_strings = 1
-let g:ycm_min_num_of_chars_for_completion = 2
-let g:ycm_python_binary_path = 'python'
-let g:ycm_semantic_triggers =  {
-      \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
-      \ 'cs,lua,javascript': ['re!\w{2}'],
-      \}
+" set completeopt=longest,menu
+" autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+" 
+" let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
+" let g:ycm_confirm_extra_conf = 0
+" "let g:ycm_key_invoke_completion='<C-j>'
+" let g:ycm_error_symbol = 'E>'
+" let g:ycm_warning_symbol = 'W>'
+" " 使用 NerdFont 中的图标表示错误和警告
+" " let g:ycm_error_symbol = '﯇'
+" " let g:ycm_warning_symbol = '卵'
+" let g:ycm_enable_diagnostic_signs = 1
+" let g:ycm_enable_diagnostic_highlighting = 1
+" let g:ycm_collect_identifiers_from_comments_and_strings = 0
+" let g:ycm_complete_in_comments = 1
+" let g:ycm_complete_in_strings = 1
+" let g:ycm_min_num_of_chars_for_completion = 2
+" let g:ycm_python_binary_path = 'python'
+" let g:ycm_semantic_triggers =  {
+"       \ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+"       \ 'cs,lua,javascript': ['re!\w{2}'],
+"       \}
 
 
 """""""""""""""""""""""""" Tagbar(函数列表)
@@ -211,15 +212,11 @@ let g:NERDTreeWinPos="right"
 let g:NERDTreeWinSize=20
 
 
-"""""""""""""""""""""""""" CtrlP(快速查找文件)
-" let g:ctrlp_working_path_mode='a'
-
-
 """""""""""""""""""""""""" UltiSnips(代码模板)
-let g:UltiSnipsExpandTrigger="<C-j>"
-let g:UltiSnipsListSnippets="<C-e>"
-let g:UltiSnipsJumpForwardTrigger="<C-j>"
-let g:UltiSnipsJumpBackwardTrgger="<C-k>"
+" let g:UltiSnipsExpandTrigger="<C-j>"
+" let g:UltiSnipsListSnippets="<C-e>"
+" let g:UltiSnipsJumpForwardTrigger="<C-j>"
+" let g:UltiSnipsJumpBackwardTrgger="<C-k>"
 
 
 """""""""""""""""""""""""" LeaderF
@@ -229,9 +226,9 @@ let g:Lf_WindowHeight = 0.30
 
 """"""""""""""""""""""" 按键映射和快捷键提示
 " 跳转到定义
-nnoremap <c-k> :YcmCompleter GoToDefinitionElseDeclaration<CR>
+" nnoremap <c-k> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 " 返回到跳转前的位置
-nnoremap <c-l> <c-o>
+" nnoremap <c-l> <c-o>
 
 " 切换鼠标状态
 function! MouseToggle()
@@ -269,9 +266,9 @@ endfunction
 
 function MenuA()
   echo "[a] 跳转定义  [s] 查找引用  [d] 重命名  [f] 修正错误  [g] 函数签名  [q] 取消"
-	nnoremap <silent><nowait> a :call GuideEsc()<cr>:echo "TODO"<CR>
-	nnoremap <silent><nowait> s :call GuideEsc()<cr>:echo "TODO"<CR>
-	nnoremap <silent><nowait> d :call GuideEsc()<cr>:echo "TODO"<CR>
+	nnoremap <silent><nowait> a :call GuideEsc()<cr>:call CocActionAsync('jumpDefinition')<CR>
+	nnoremap <silent><nowait> s :call GuideEsc()<cr>:call CocActionAsync('jumpReferences')<CR>
+	nnoremap <silent><nowait> d :call GuideEsc()<cr>:call CocActionAsync('rename')<CR>
 	nnoremap <silent><nowait> f :call GuideEsc()<cr>:echo "TODO"<CR>
 	nnoremap <silent><nowait> g :call GuideEsc()<cr>:echo "TODO"<CR>
 	nnoremap <silent><nowait> w <nop>
@@ -384,3 +381,29 @@ inoremap <esc> <esc>:w<cr>
 " 快速缩进
 vnoremap < <gv
 vnoremap > >gv
+
+""""""""""""""""""""""" COC
+" https://github.com/neoclide/coc.nvim
+" use <tab> for trigger completion and navigate to next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" 定义 coc-snippets-expand 的快捷键
+imap <C-j> <Plug>(coc-snippets-expand)
+nmap  <c-k> <Plug>(coc-definition)
+
+" nmap <silent> gr <Plug>(coc-references)
+" nmap <silent> gy <Plug>(coc-type-definition)
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+" 返回到跳转前的位置
+nnoremap <c-l> <c-o>
