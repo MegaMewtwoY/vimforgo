@@ -115,9 +115,9 @@ nnoremap gT :bpre<cr>
 " let g:airline_theme="minimalist"
 " let g:airline_theme="kolor"
 " let g:airline_theme="jellybeans"
-" let g:airline_theme="distinguished"
+let g:airline_theme="distinguished"
 " let g:airline_theme="base16_google"
-let g:airline_theme="behelit"
+" let g:airline_theme="behelit"
 
 set helplang=cn
 set ambiwidth=double
