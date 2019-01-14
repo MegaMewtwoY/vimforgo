@@ -97,9 +97,9 @@ nnoremap J <C-w>j
 nnoremap K <C-w>k
 nnoremap L <C-w>l
 " 快速保存
-inoremap jk <esc>:w<cr>
-nnoremap <esc> :w<cr>
-inoremap <esc> <esc>:w<cr>
+inoremap jk <esc>:w<cr>:lclose<cr>
+nnoremap <esc> :w<cr>:lclose<cr>
+inoremap <esc> <esc>:w<cr>lclose<cr>
 " 快速缩进
 vnoremap < <gv
 vnoremap > >gv
@@ -336,9 +336,9 @@ function MenuS()
 endfunction
 
 function MenuD()
-	echo "[a] 编译运行  [q] 取消"
+	echo "[a] 编译运行  [s] 查看错误  [q] 取消"
 	nnoremap <silent><nowait> a :call GuideEsc()<cr>:call Compile()<cr>
-	nnoremap <silent><nowait> s :call GuideEsc()<cr>
+	nnoremap <silent><nowait> s :call GuideEsc()<cr>:lopen<cr>
 	nnoremap <silent><nowait> d :call GuideEsc()<cr>
 	nnoremap <silent><nowait> f :call GuideEsc()<cr>
 	nnoremap <silent><nowait> g :call GuideEsc()<cr>
