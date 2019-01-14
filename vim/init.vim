@@ -17,6 +17,32 @@ Plug 'fatih/vim-go'
 call plug#end()
 
 
+""""""""""""""""""""""" COC
+" https://github.com/neoclide/coc.nvim
+" use <tab> for trigger completion and navigate to next complete item
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" 定义 coc-snippets-expand 的快捷键
+imap <C-j> <Plug>(coc-snippets-expand)
+nmap  <c-k> <Plug>(coc-definition)
+
+" nmap <silent> gr <Plug>(coc-references)
+" nmap <silent> gy <Plug>(coc-type-definition)
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+" 返回到跳转前的位置
+nnoremap <c-l> <c-o>
+
 """""""""""""""""""""""""" 主题
 " colorscheme atom
 " colorscheme molokai
@@ -64,6 +90,23 @@ set noshowmode
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
+
+" 调整窗口移动
+nnoremap H <C-w>h
+nnoremap J <C-w>j
+nnoremap K <C-w>k
+nnoremap L <C-w>l
+" 快速保存
+inoremap jk <esc>:w<cr>
+nnoremap <esc> :w<cr>
+inoremap <esc> <esc>:w<cr>
+" 快速缩进
+vnoremap < <gv
+vnoremap > >gv
+
+" 切换 buffer
+nnoremap gt :bnext<cr>
+nnoremap gT :bpre<cr>
 
 
 """""""""""""""""""""""""" airline 彩色状态栏/标签页
@@ -259,19 +302,23 @@ function GuideEsc()
 	unmap <esc>
 	echo ""
 endfunction
+
 function Terminal()
 	sp
+  exe "normal J"
+  set nonu
 	terminal
+  exe "normal A"
 endfunction
 
 function MenuA()
-  echo "[a] 跳转定义  [s] 查找引用  [d] 重命名  [f] 修正错误  [g] 函数签名  [q] 取消"
+  echo "[a] 跳转定义  [s] 查找引用  [d] 重命名 [q] 取消"
 	nnoremap <silent><nowait> a :call GuideEsc()<cr>:call CocActionAsync('jumpDefinition')<CR>
 	nnoremap <silent><nowait> s :call GuideEsc()<cr>:call CocActionAsync('jumpReferences')<CR>
 	nnoremap <silent><nowait> d :call GuideEsc()<cr>:call CocActionAsync('rename')<CR>
-	nnoremap <silent><nowait> f :call GuideEsc()<cr>:echo "TODO"<CR>
-	nnoremap <silent><nowait> g :call GuideEsc()<cr>:echo "TODO"<CR>
-	nnoremap <silent><nowait> w <nop>
+	nnoremap <silent><nowait> f :call GuideEsc()<cr>
+	nnoremap <silent><nowait> g :call GuideEsc()<cr>
+	nnoremap <silent><nowait> w :call GuideEsc()<cr>
 	nnoremap <silent><nowait> q :call GuideEsc()<cr>
 	nnoremap <silent><nowait> <esc> :call GuideEsc()<cr>
 endfunction
@@ -282,30 +329,30 @@ function MenuS()
 	nnoremap <silent><nowait> s :call GuideEsc()<cr>:LeaderfFile<cr>
 	nnoremap <silent><nowait> d :call GuideEsc()<cr>:LeaderfBuffer<cr>
 	nnoremap <silent><nowait> f :call GuideEsc()<cr>:LeaderfMru<cr>
-	nnoremap <silent><nowait> g <nop>
-	nnoremap <silent><nowait> w <nop>
+	nnoremap <silent><nowait> g :call GuideEsc()<cr>
+	nnoremap <silent><nowait> w :call GuideEsc()<cr>
 	nnoremap <silent><nowait> q :call GuideEsc()<cr>
 	nnoremap <silent><nowait> <esc> :call GuideEsc()<cr>
 endfunction
 
 function MenuD()
-	echo "[a] 编译运行  [s] 编译检查  [q] 取消"
+	echo "[a] 编译运行  [q] 取消"
 	nnoremap <silent><nowait> a :call GuideEsc()<cr>:call Compile()<cr>
-	nnoremap <silent><nowait> s :call GuideEsc()<cr>:YcmDiags<CR>
-	nnoremap <silent><nowait> d <nop>
-	nnoremap <silent><nowait> f <nop>
-	nnoremap <silent><nowait> g <nop>
-	nnoremap <silent><nowait> w <nop>
+	nnoremap <silent><nowait> s :call GuideEsc()<cr>
+	nnoremap <silent><nowait> d :call GuideEsc()<cr>
+	nnoremap <silent><nowait> f :call GuideEsc()<cr>
+	nnoremap <silent><nowait> g :call GuideEsc()<cr>
+	nnoremap <silent><nowait> w :call GuideEsc()<cr>
 endfunction
 
 function MenuF()
-	echo "[a] 函数列表  [s] 文件列表  [d] .h/.c  [f] 标签页  [q] 取消"
+	echo "[a] 函数列表  [s] 文件列表  [d] 终端  [q] 取消"
 	nnoremap <silent><nowait> a :call GuideEsc()<cr>:TagbarToggle<cr>
 	nnoremap <silent><nowait> s :call GuideEsc()<cr>:NERDTreeToggle<cr>
-	nnoremap <silent><nowait> d :call GuideEsc()<cr>:AT<cr>
-	nnoremap <nowait> f :call GuideEsc()<cr>:tabe 
-	nnoremap <silent><nowait> g <nop>
-	nnoremap <silent><nowait> w <nop>
+	nnoremap <silent><nowait> d :call GuideEsc()<cr>:call Terminal()<cr>
+	nnoremap <silent><nowait> f :call GuideEsc()<cr>
+	nnoremap <silent><nowait> g :call GuideEsc()<cr>
+	nnoremap <silent><nowait> w :call GuideEsc()<cr>
 	nnoremap <silent><nowait> q :call GuideEsc()<cr>
 	nnoremap <silent><nowait> <esc> :call GuideEsc()<cr>
 endfunction
@@ -316,8 +363,8 @@ function MenuWA()
 	nnoremap <silent><nowait> s :call GuideEsc()<cr>:set paste!<cr>
 	nnoremap <silent><nowait> d :call GuideEsc()<cr>:call NumToggle()<cr>
 	nnoremap <silent><nowait> f :call GuideEsc()<cr>:set list!<cr>
-	nnoremap <silent><nowait> g <nop>
-	nnoremap <silent><nowait> w <nop>
+	nnoremap <silent><nowait> g :call GuideEsc()<cr><nop>
+	nnoremap <silent><nowait> w :call GuideEsc()<cr><nop>
 	nnoremap <silent><nowait> q :call GuideEsc()<cr>
 	nnoremap <silent><nowait> <esc> :call GuideEsc()<cr>
 endfunction
@@ -326,10 +373,10 @@ function MenuWS()
 	echo "[a] 文档注释  [s] 折叠/展开  [q] 取消"
 	nnoremap <silent><nowait> a :call GuideEsc()<cr>:Dox<cr><esc>
 	nnoremap <silent><nowait> s :call GuideEsc()<cr>:call ToggleFold()<cr>
-	nnoremap <silent><nowait> d <nop>
-	nnoremap <silent><nowait> f <nop>
-	nnoremap <silent><nowait> g <nop>
-	nnoremap <silent><nowait> w <nop>
+	nnoremap <silent><nowait> d :call GuideEsc()<cr><nop>
+	nnoremap <silent><nowait> f :call GuideEsc()<cr><nop>
+	nnoremap <silent><nowait> g :call GuideEsc()<cr><nop>
+	nnoremap <silent><nowait> w :call GuideEsc()<cr><nop>
 	nnoremap <silent><nowait> q :call GuideEsc()<cr>
 	nnoremap <silent><nowait> <esc> :call GuideEsc()<cr>
 	" TODO 快速注释和格式整理
@@ -364,46 +411,6 @@ function GuideEntry()
 	" 1. 重新映射相关快捷键到 space
 	call GuideMapTopMenu()
 	" 2. 打印菜单
-	echo "[a] 语义  [s] 查找  [d] 调试  [f] 窗口  [w] 其他  [q] 取消  [t] 终端"
+	echo "[a] 语义  [s] 查找  [d] 调试  [f] 窗口  [w] 其他  [q] 取消"
 endfunction
 
-
-""" 其他
-" 调整窗口移动
-nnoremap H <C-w>h
-nnoremap J <C-w>j
-nnoremap K <C-w>k
-nnoremap L <C-w>l
-" 快速保存
-inoremap jk <esc>:w<cr>
-nnoremap <esc> :w<cr>
-inoremap <esc> <esc>:w<cr>
-" 快速缩进
-vnoremap < <gv
-vnoremap > >gv
-
-""""""""""""""""""""""" COC
-" https://github.com/neoclide/coc.nvim
-" use <tab> for trigger completion and navigate to next complete item
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" 定义 coc-snippets-expand 的快捷键
-imap <C-j> <Plug>(coc-snippets-expand)
-nmap  <c-k> <Plug>(coc-definition)
-
-" nmap <silent> gr <Plug>(coc-references)
-" nmap <silent> gy <Plug>(coc-type-definition)
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-
-" 返回到跳转前的位置
-nnoremap <c-l> <c-o>
