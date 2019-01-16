@@ -8,7 +8,7 @@ Plug 'bling/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'SirVer/ultisnips'
 Plug 'tpope/vim-surround'
-Plug 'flazz/vim-colorschemes'
+Plug 'MegaMewtwoY/vim-colorschemes'
 Plug 'Yggdroot/LeaderF'
 Plug 'ryanoasis/vim-devicons'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install() }}
@@ -44,13 +44,13 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nnoremap <c-l> <c-o>
 
 """""""""""""""""""""""""" 主题
-" colorscheme atom
 " colorscheme molokai
 colorscheme luna-term
+" colorscheme OceanicNext
 
 " 以下为 gruvbox 主题专用 
 " colorscheme gruvbox
-" let g:gruvbox_contrast_light="light"
+" let g:gruvbox_contrast_light="dark"
 " let g:gruvbox_contrast_dark="hard"
 " let g:gruvbox_improved_warnings=1
 
@@ -98,8 +98,8 @@ nnoremap K <C-w>k
 nnoremap L <C-w>l
 " 快速保存
 inoremap jk <esc>:w<cr>:lclose<cr>
-nnoremap <esc> :w<cr>:lclose<cr>
-inoremap <esc> <esc>:w<cr>lclose<cr>
+nnoremap <silent> <esc> :w<cr>:lclose<cr>
+inoremap <esc> <esc>:w<cr>
 " 快速缩进
 vnoremap < <gv
 vnoremap > >gv
