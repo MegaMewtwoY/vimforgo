@@ -26,8 +26,18 @@
       "command": "bingo",
       "args": ["-enable-global-cache"],
       "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
-      "filetypes": ["go"]
+      "filetypes": ["go"],
+      "trace.server": "verbose"
     }
-  }
+  },
+  // "languageserver": {
+  //   "golang": {
+  //     "command": "gopls",
+  //     "args": [],
+  //     "rootPatterns": ["go.mod", ".vim/", ".git/", ".hg/"],
+  //     "filetypes": ["go"],
+  //     "trace.server": "verbose"
+  //   }
+  // }
   // "snippets.ultisnips.directories": ["./snippets"]
 }
