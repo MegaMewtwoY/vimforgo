@@ -4,6 +4,7 @@
 #    安装过程一定要参考官方文档. 需要先安装 yarn 和 node.js
 #    然后再执行 PlugInstall
 #    参考: https://github.com/neoclide/coc.nvim/wiki/Install-coc.nvim
+#    安装出现问题的时候可以使用 checkhealth 检测状态, 很好用
 # 2. 下载 bingo
 #    coc.nvim 只是一个补全框架 + lsp 客户端, 还需要一个真正的 language server.
 #    不过 bingo 已经不继续维护了. 后面会有一个新的官方的 language server: gopls
