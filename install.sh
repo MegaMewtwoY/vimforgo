@@ -13,7 +13,6 @@
 #    目前 Centos7 默认的 yum 源安装后 Go 版本就是 1.11 了, 所以不需要手动安装, 直接 yum 安装
 #    相关环境变量已经要配置正确, 否则 language server 不能正确工作
 #    bashrc 文件已经备份到该项目中
-
 set -x
 root=`pwd`
 mkdir -p ~/.config/
